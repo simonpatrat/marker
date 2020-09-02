@@ -1,0 +1,50 @@
+.container {
+  width: 95%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.pagination {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keywords-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  li {
+    margin: 5px;
+  }
+}
+
+.pagination {
+  &__item {
+    align-items: stretch !important;
+    padding: 0 !important;
+    button {
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      display: block;
+      padding: 0.92857143em 1.14285714em;
+    }
+  }
+}
