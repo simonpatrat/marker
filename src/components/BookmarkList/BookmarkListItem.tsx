@@ -24,7 +24,6 @@ export const BookmarkListItem: React.FunctionComponent<BookmarkListItemProps> = 
   onClickDeletButton,
 }) => {
   const duration = 'duration' in informations ? getVideoDurationTime(informations.duration) : '-';
-  console.log('informations: ', informations);
 
   return (
     <Table.Row>
@@ -41,8 +40,8 @@ export const BookmarkListItem: React.FunctionComponent<BookmarkListItemProps> = 
       <Table.Cell>{informations.author}</Table.Cell>
       <Table.Cell>{type}</Table.Cell>
       <Table.Cell>
-        <p>Largeur: {informations.width}</p>
-        <p>Heuteur: {informations.height}</p>
+        <p>Largeur: {informations.width}px</p>
+        <p>Heuteur: {informations.height}px</p>
       </Table.Cell>
       <Table.Cell>
         <p>{duration}</p>

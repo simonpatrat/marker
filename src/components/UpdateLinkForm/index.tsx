@@ -11,6 +11,8 @@ import { Bookmark } from '../../lib/types';
 import { BookmarkKeywordsList } from '../BookmarkKeywordsList';
 import { FeedBackMessage } from '../FeedbackMessage';
 
+import { getVideoDurationTime } from '../BookmarkList/helpers';
+
 type UpdateLinkFormProps = {
   bookmarkToUdpate: Bookmark;
 };
@@ -100,6 +102,10 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = ({
     [setNewKeyword],
   );
 
+  const duration =
+    bookmark && 'duration' in bookmark.informations
+      ? getVideoDurationTime(bookmark.informations.duration)
+      : null;
   const couldSubmit = true; // TODO: FIXME: validation + condition
 
   return bookmark ? (
@@ -131,10 +137,13 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = ({
           </div>
         )}
         <div>
-          <div>title: {bookmark.informations.title}</div>
+          <div>Titre: {bookmark.informations.title}</div>
           <div>Type: {bookmark.type}</div>
           <div>Url: {bookmark.informations.url}</div>
-          <div>Author: {bookmark.informations.author}</div>
+          <div>Auteur: {bookmark.informations.author}</div>
+          <div>Largeur: {bookmark.informations.width}px</div>
+          <div>Hauteur: {bookmark.informations.height}px</div>
+          {duration && <div>Durée: {duration}</div>}
           <div>Mots clés: </div>
           <BookmarkKeywordsList
             onClickDeleteButton={handleDeleteKeyWordButtonClick}
