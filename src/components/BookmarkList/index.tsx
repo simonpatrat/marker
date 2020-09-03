@@ -24,7 +24,6 @@ export const BookmarkList: React.FunctionComponent<BookmarkListProps> = () => {
 
       if (data.error) {
         // TODO: Provide indication on error
-        // flashErrorMessage(dispatch, error);
         return;
       }
 
@@ -62,7 +61,6 @@ export const BookmarkList: React.FunctionComponent<BookmarkListProps> = () => {
         }
       } catch (error) {
         // TODO: Provide indication on error
-        // flashErrorMessage(dispatch, error);
       }
     },
     [dispatch],
@@ -74,7 +72,6 @@ export const BookmarkList: React.FunctionComponent<BookmarkListProps> = () => {
 
       if (data.error) {
         // TODO: Provide indication on error
-        // flashErrorMessage(dispatch, error);
         return;
       }
 
