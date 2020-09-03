@@ -1,3 +1,81 @@
+# Marker
+
+React bookmark saver application
+
+## Installation
+
+### 1) Clone the project
+
+```
+git clone https://github.com/simonpatrat/marker.git
+```
+
+### 2) cd to the project folder
+
+```
+cd marker
+```
+
+### 3) Install dependencies
+
+```
+npm install
+```
+
+or
+
+```
+yarn install
+```
+
+### 4) Create a `.env` file at the root of the project folder
+
+```
+touch .env
+```
+
+### 5) In `.env` file, define environment variables with your flickr and vimeo api keys
+
+```
+REACT_APP_VIMEO_AUTHORIZATION_TOKEN=[YOUR_VIMEO_API_KEY]
+REACT_APP_FLICKR_API_KEY=[YOUR_FLICKR_API_KEY]
+```
+
+### Finally run the application
+
+```
+npm run start
+
+```
+
+Or
+
+```
+yarn start
+```
+
+you could now navigate to [http://localhost:3000](http://localhost:3000)
+
+The project is proxying api calls based on `"proxy"` entry in package.json.
+The backend is configured to run on 5000 port, you can change it, but be sure to replicate this change by also changing the `"proxy"` value with your new port in this application package.json
+
+### Test
+
+Some tests have been written to ensure urls testing correct behaviour, to run it:
+
+```
+yarn test
+
+```
+
+or
+
+```
+npm run test
+```
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
