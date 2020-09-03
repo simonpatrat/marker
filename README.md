@@ -65,7 +65,6 @@ Some tests have been written to ensure urls testing correct behaviour, to run it
 
 ```
 yarn test
-
 ```
 
 or
