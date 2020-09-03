@@ -1,4 +1,4 @@
-import { BookmarksResponse, Bookmark } from '../../lib/types';
+import { BookmarksResponse, Bookmark, BookmarkResponse } from '../../lib/types';
 
 type GetBookMarksApiCallParameters = {
   perPage?: number;
@@ -26,6 +26,13 @@ export const deleteBookmark = async (
       'Content-Type': 'application/json',
     },
   });
+  const data = await response.json();
+
+  return data;
+};
+
+export const getBookmark = async (id: string): Promise<BookmarkResponse> => {
+  const response = await fetch(`/api/v1/bookmark/${id}`);
   const data = await response.json();
 
   return data;

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bookmark } from '../lib/types';
 
+import { getBookmark as apiGetBookmark } from '../lib/api';
+
 import { UpdateLinkForm } from '../components/UpdateLinkForm';
 
 type HomeProps = {};
@@ -12,9 +14,8 @@ export const UpdateLinkPage: React.FunctionComponent<HomeProps> = () => {
 
   useEffect(() => {
     const getBookmark = async (): Promise<void> => {
-      const response = await fetch(`/api/v1/bookmark/${id}`);
-      const responseJson = await response.json();
-      if (!responseJson.error) {
+      const responseJson = await apiGetBookmark(id);
+      if (!responseJson.error && responseJson.bookmark) {
         setBookmark(responseJson.bookmark);
       }
     };

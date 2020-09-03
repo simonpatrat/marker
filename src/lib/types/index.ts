@@ -25,6 +25,12 @@ export type Bookmark = {
   keywords: string[] | [];
 };
 
+export type BookmarkResponse = {
+  error: boolean;
+  bookmark?: Bookmark;
+  message?: string;
+};
+
 export type BookmarksResponse = {
   error: boolean;
   pages: number;
