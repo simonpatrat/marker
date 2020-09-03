@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 
-import { Home } from './components/Home';
-import { UpdateLinkForm } from './components/UpdateLinkForm';
+import { Home } from './pages/Home';
+import { UpdateLinkPage } from './pages/UpdateLinkPage';
 
 import 'semantic-ui-css/semantic.min.css';
 import './App.scss';
@@ -21,7 +21,7 @@ function App(): JSX.Element {
             <Home />
           </Route>
           <Route path="/bookmark/:id">
-            <UpdateLinkForm />
+            <UpdateLinkPage />
           </Route>
           <Route path="*">
             <h1>404 - Not found</h1>

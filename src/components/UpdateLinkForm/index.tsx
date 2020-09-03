@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState, useEffect, useContext } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
-import { Form, Button } from 'semantic-ui-react';
+import React, { useCallback, useRef, useState, useContext } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { Form, Button, Image } from 'semantic-ui-react';
 
 import { updateBookmark } from '../../lib/api';
 
@@ -9,14 +9,20 @@ import { BookmarksContext } from '../../context';
 import { Bookmark } from '../../lib/types';
 
 import { BookmarkKeywordsList } from '../BookmarkKeywordsList';
+import { FeedBackMessage } from '../FeedbackMessage';
 
-type UpdateLinkFormProps = {};
+type UpdateLinkFormProps = {
+  bookmarkToUdpate: Bookmark;
+};
 
-export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () => {
+export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = ({
+  bookmarkToUdpate,
+}) => {
   const { id } = useParams();
   const history = useHistory();
-  const [bookmark, setBookmark] = useState<Bookmark | null>(null);
+  const [bookmark, setBookmark] = useState<Bookmark | null>(bookmarkToUdpate);
   const [newKeyword, setNewKeyword] = useState<string | null>(null);
+  const [errorMessages, setErrorsMessages] = useState<string[]>([]);
   const { state, dispatch } = useContext(BookmarksContext);
 
   const formElement = useRef(null);
@@ -30,12 +36,11 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
         try {
           const data = await updateBookmark({
             ...bookmark,
+            id: 's,adbjkasbdjkasbdjkkjjjjjj',
             dateBookmarked,
           });
           if (data.error) {
-            // TODO: Provide indication on error
-            // flashErrorMessage(dispatch, error);
-            return;
+            throw new Error(data.message);
           }
 
           const { bookmarks, pagination } = data;
@@ -51,24 +56,12 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
             history.push('/');
           }
         } catch (error) {
-          // TODO: Error Message
+          setErrorsMessages([...new Set([...errorMessages, error])]);
         }
       }
     },
-    [bookmark],
-  ); // TODO: handleFormSubmit;
-
-  useEffect(() => {
-    const getBookmark = async (): Promise<void> => {
-      const response = await fetch(`/api/v1/bookmark/${id}`);
-      const responseJson = await response.json();
-      if (!responseJson.error) {
-        setBookmark(responseJson.bookmark);
-      }
-    };
-
-    getBookmark();
-  }, [id, setBookmark]);
+    [bookmark, errorMessages],
+  );
 
   const handleDeleteKeyWordButtonClick = useCallback(
     (keyword: string) => {
@@ -104,44 +97,64 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
       if (keyword.length > 3) {
         setNewKeyword(keyword);
       }
-
-      // TODO: Error message if keyword has not enough characters
     },
     [setNewKeyword],
   );
 
-  const couldSubmit = true; // TODO: FIXME: condition
+  const couldSubmit = true; // TODO: FIXME: validation + condition
 
   return bookmark ? (
-    <section className="page update-link-page">
-      <header className="page__header">
-        <h1>Modifier le lien &quot;{bookmark.informations.title}&quot;</h1>
-        <Link to="/">Retourner à la liste des bookmarks</Link>
-      </header>
-      <Form ref={formElement} onSubmit={handleFormSubmit}>
-        <div key={id} className="bookmark">
+    <>
+      {errorMessages && errorMessages.length > 0
+        ? errorMessages.map((message: string, index) => {
+            return (
+              <FeedBackMessage
+                key={`error-message#${message}#${index.toString(36)}`}
+                message={message}
+                type="negative"
+              >
+                {message}
+              </FeedBackMessage>
+            );
+          })
+        : null}
+
+      <div className="bookmark bookmark--in-modify-page">
+        {bookmark.informations?.photoUrl && (
           <div>
-            <div>title: {bookmark.informations.title}</div>
-            <div>Type: {bookmark.type}</div>
-            <div>Url: {bookmark.informations.url}</div>
-            <div>Author: {bookmark.informations.author}</div>
-            <div>Mots clés: </div>
-            <BookmarkKeywordsList
-              onClickDeleteButton={handleDeleteKeyWordButtonClick}
-              bookmark={bookmark}
-              withDeleteButton
+            <Image
+              src={bookmark.informations.photoUrl}
+              as="a"
+              size="medium"
+              href={bookmark.informations.url}
+              target="_blank"
             />
           </div>
+        )}
+        <div>
+          <div>title: {bookmark.informations.title}</div>
+          <div>Type: {bookmark.type}</div>
+          <div>Url: {bookmark.informations.url}</div>
+          <div>Author: {bookmark.informations.author}</div>
+          <div>Mots clés: </div>
+          <BookmarkKeywordsList
+            onClickDeleteButton={handleDeleteKeyWordButtonClick}
+            bookmark={bookmark}
+            withDeleteButton
+          />
         </div>
+      </div>
+      <Form ref={formElement} onSubmit={handleFormSubmit}>
         <Form.Field>
           <label htmlFor="tags-input">
-            Ajouter un mot clé
+            Ajouter un mot clé (3 caractères minimum)
             <input
               ref={keywordInputElement}
               type="text"
               name="tag"
               id="tags-input"
               onChange={handleKeyWordInputChange}
+              placeholder="Votre mot clé"
             />
           </label>
           <Button type="button" onClick={handleAddkeyWordButtonClick}>
@@ -153,6 +166,6 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
           Sauvegarder!
         </Button>
       </Form>
-    </section>
+    </>
   ) : null;
 };

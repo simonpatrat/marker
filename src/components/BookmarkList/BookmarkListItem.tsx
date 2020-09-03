@@ -39,12 +39,12 @@ export const BookmarkListItem: React.FunctionComponent<BookmarkListItemProps> = 
       <Table.Cell>{getDateString(dateBookmarked)}</Table.Cell>
       <Table.Cell className="actions-table-cell">
         <Link to={`/bookmark/${bookmarkId}`} className="ui button primary mini">
-          Update
+          Modifier
         </Link>
         <ConfirmationModal
           modalTriggerElement={
             <Button size="mini" type="button">
-              Delete
+              Supprimer
             </Button>
           }
           confirmCallback={(): Promise<void> => onClickDeletButton(bookmarkId)}

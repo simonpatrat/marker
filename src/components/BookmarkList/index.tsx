@@ -1,18 +1,15 @@
 /* eslint-disable react/no-unescaped-entities*/
-import React, { useCallback, useContext, useEffect, ReactText } from 'react';
-import { Link } from 'react-router-dom';
-import { Icon, Table, Button, Image } from 'semantic-ui-react';
+import React, { useCallback, useContext, useEffect } from 'react';
+
+import { Table } from 'semantic-ui-react';
 
 import { BookmarksContext } from '../../context';
-
-import { getDateString } from './helpers';
 
 import { getBookmarks, deleteBookmark } from '../../lib/api';
 
 import { Bookmark } from '../../lib/types';
 
 import { Pagination } from '../Pagination';
-import { ConfirmationModal } from '../ConfirmationModal';
 
 import { BookmarkListItem } from './BookmarkListItem';
 
