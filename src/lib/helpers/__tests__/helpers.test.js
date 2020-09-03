@@ -11,17 +11,14 @@ const invalidFlikrUrls = [
   'https://google.com',
   'http://flic.kr/p/2jAEXNH/test12',
   'https://www.flickr.com/photos/',
+  'https://www.flickr.com/photos/pageworld/50270116493/in/explore-2020-08-27/sdsadasd',
 ];
 const validFlickrUrls = [
   'https://www.flickr.com/photos/etienner68/50275477217/in/explore-2020-08-27/',
-
   'https://www.flickr.com/photos/zataom/50274457943/in/explore-2020-08-28',
-
   'https://www.flickr.com/photos/etienner68/50275477217/sizes/l/',
   'https://flic.kr/p/2jAEXNH',
   'http://www.flickr.com/photos/etienner_68/50275477217/in/explore-2020-08-27/',
-  'http://www.flickr.com/photos/etienner68/50275477217/sizes/l/',
-  'http://flic.kr/p/2jAEXNH',
   'https://flic.kr/p/2jAzJP2',
   'https://www.flickr.com/photos/ferdinand_hejl/50277385393/in/explore-2020-08-28/',
   'https://www.flickr.com/photos/37034324@N05/50273037568/in/explore-2020-08-27/',

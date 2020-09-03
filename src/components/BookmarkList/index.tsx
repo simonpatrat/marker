@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities*/
 import React, { useCallback, useContext, useEffect, ReactText } from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Button } from 'semantic-ui-react';
+import { Icon, Table, Button, Image } from 'semantic-ui-react';
 
 import { BookmarksContext } from '../../context';
 
@@ -13,6 +13,8 @@ import { Bookmark } from '../../lib/types';
 
 import { Pagination } from '../Pagination';
 import { ConfirmationModal } from '../ConfirmationModal';
+
+import { BookmarkListItem } from './BookmarkListItem';
 
 type BookmarkListProps = {};
 
@@ -115,26 +117,14 @@ export const BookmarkList: React.FunctionComponent<BookmarkListProps> = () => {
         {bookmarks.map((bookmark: Bookmark) => {
           const { id, type, dateBookmarked, informations } = bookmark;
           return (
-            <Table.Row key={id}>
-              <Table.Cell>
-                <a href={informations.url} target="_blank" rel="noopener noreferrer">
-                  {`${informations.url} `}
-                  <Icon aria-hidden="true" name="external alternate" />
-                </a>
-              </Table.Cell>
-              <Table.Cell>{informations.title}</Table.Cell>
-              <Table.Cell>{informations.author}</Table.Cell>
-              <Table.Cell>{type}</Table.Cell>
-              <Table.Cell>{getDateString(informations.dateAdded)}</Table.Cell>
-              <Table.Cell>{getDateString(dateBookmarked)}</Table.Cell>
-              <Table.Cell>
-                <Link to={`/bookmark/${id}`}>Update</Link>
-                <ConfirmationModal
-                  modalTriggerElement={<Button type="button">Delete</Button>}
-                  confirmCallback={(): Promise<void> => handleDeleteButtonClick(id)}
-                />
-              </Table.Cell>
-            </Table.Row>
+            <BookmarkListItem
+              key={id}
+              bookmarkId={id}
+              type={type}
+              dateBookmarked={dateBookmarked}
+              informations={informations}
+              onClickDeletButton={handleDeleteButtonClick}
+            />
           );
         })}
       </Table.Body>

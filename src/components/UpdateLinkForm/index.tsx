@@ -113,9 +113,11 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
   const couldSubmit = true; // TODO: FIXME: condition
 
   return bookmark ? (
-    <>
-      <h1>Modifier le lien &quot;{bookmark.informations.title}&quot;</h1>
-      <Link to="/">Retourner à la liste des bookmarks</Link>
+    <section className="page update-link-page">
+      <header className="page__header">
+        <h1>Modifier le lien &quot;{bookmark.informations.title}&quot;</h1>
+        <Link to="/">Retourner à la liste des bookmarks</Link>
+      </header>
       <Form ref={formElement} onSubmit={handleFormSubmit}>
         <div key={id} className="bookmark">
           <div>
@@ -151,6 +153,6 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = () =
           Sauvegarder!
         </Button>
       </Form>
-    </>
+    </section>
   ) : null;
 };

@@ -7,11 +7,13 @@ type HomeProps = {};
 
 export const Home: React.FunctionComponent<HomeProps> = () => {
   return (
-    <div className="home">
-      <h1>Marker</h1>
-      <p>A Bookmark saver React application</p>
+    <section className="home page">
+      <header className="page__header">
+        <h1>Liste des bookmarks</h1>
+        <p>Commencez par entrer un lien Vimeo ou Flickr</p>
+      </header>
       <AddLinkForm />
       <BookmarkList />
-    </div>
+    </section>
   );
 };

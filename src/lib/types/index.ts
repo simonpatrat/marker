@@ -2,7 +2,8 @@ export type BookmarkLink = {
   url: string;
   title: string;
   author: string;
-  dateAdded: string; // TODO: FIXME: for the moment ISO dates are strings
+  dateAdded: string;
+  photoUrl?: string;
 };
 
 export type VideoBookmarkLink = BookmarkLink & {

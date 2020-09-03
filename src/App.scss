@@ -15,6 +15,23 @@
   border: 0;
 }
 
+.page {
+  &__header {
+    padding: 32px 0;
+  }
+}
+
+#app-nav-menu {
+  padding: 16px 0;
+  display: flex;
+
+  .app-title {
+    font-size: 2rem;
+    color: black;
+    text-decoration: none;
+  }
+}
+
 .pagination {
   list-style: none;
   padding: 0;
@@ -45,6 +62,24 @@
       box-shadow: none;
       display: block;
       padding: 0.92857143em 1.14285714em;
+    }
+  }
+}
+
+.bookmark-url-cell {
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 10px;
+    max-width: 70px !important;
+  }
+}
+
+.actions-table-cell {
+  .button {
+    + .button {
+      margin-top: 10px;
     }
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 
 import { Home } from './components/Home';
 import { UpdateLinkForm } from './components/UpdateLinkForm';
@@ -11,6 +11,11 @@ function App(): JSX.Element {
   return (
     <div className="App">
       <div className="container">
+        <nav id="app-nav-menu">
+          <Link to="/" className="app-title">
+            Marker
+          </Link>
+        </nav>
         <Switch>
           <Route path="/" exact>
             <Home />

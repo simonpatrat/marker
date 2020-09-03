@@ -1,18 +1,19 @@
 import { getFlikrPhotoId } from '../helpers/url';
 import { ImageBookmarkLink } from '../types';
 
+const API_KEY = process.env.REACT_APP_FLICKR_API_KEY;
+
 export const getPhotoInfos = async (url: string): Promise<ImageBookmarkLink | null> => {
-  const flikrApiEndpoint = `https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=6fa3f86b7be6b811c3d3b44ebfe88265&format=json&nojsoncallback=1`;
+  const flikrApiEndpoint = `https://www.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=${API_KEY}&format=json&nojsoncallback=1`;
 
   try {
     const photoId = getFlikrPhotoId(url);
     const response = await fetch(`${flikrApiEndpoint}&photo_id=${photoId}`);
     const json = await response.json();
-
     const { photo } = json;
-    const { owner, dateuploaded, title } = photo;
+    const { owner, dateuploaded, title, farm, server, secret } = photo;
     const sizesResponse = await fetch(
-      `https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=6fa3f86b7be6b811c3d3b44ebfe88265&format=json&nojsoncallback=1&photo_id=${photoId}`,
+      `https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=${API_KEY}&format=json&nojsoncallback=1&photo_id=${photoId}`,
     );
 
     const sizesJson = await sizesResponse.json();
@@ -26,6 +27,9 @@ export const getPhotoInfos = async (url: string): Promise<ImageBookmarkLink | nu
       );
     });
     const { height, width } = photoSizes;
+
+    const photoUrl = `https://farm${farm}.staticflickr.com/${server}/${photoId}_${secret}.jpg`;
+
     const photoInfo = {
       url,
       title: title._content || 'No title',
@@ -33,6 +37,7 @@ export const getPhotoInfos = async (url: string): Promise<ImageBookmarkLink | nu
       dateAdded: dateuploaded,
       height,
       width,
+      photoUrl,
     };
 
     return photoInfo;

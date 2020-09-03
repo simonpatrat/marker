@@ -1,16 +1,21 @@
 import React, { useCallback, useRef, useState, useContext } from 'react';
-import { Form, Button, Ref, Loader } from 'semantic-ui-react';
+import { Form, Button, Ref, Input } from 'semantic-ui-react';
 import { VideoBookmarkLink, ImageBookmarkLink, Bookmark } from '../../lib/types';
 import { isValidUrl, isVimeoUrl, isFlickrUrl } from '../../lib/helpers/url';
 import { getVideoInfos } from '../../lib/externalApis/vimeo';
 import { getPhotoInfos } from '../../lib/externalApis/flickr';
 import { BookmarksContext } from '../../context';
 
+import { FeedBackMessage } from '../FeedbackMessage';
+
+import { addBookmarkForm as labels } from '../../lib/labels';
+
 type AddLinkFormProps = {};
 
 export const AddLinkForm: React.FunctionComponent<AddLinkFormProps> = ({}) => {
   const formElement = useRef<HTMLFormElement | null>(null);
 
+  // TODO: useReducer instead of multiple useStates
   const [linkMediaType, setLinkMediaType] = useState<'video' | 'image' | null>(null);
   const [currentLinkInformation, setCurrentLinkInformation] = useState<
     VideoBookmarkLink | ImageBookmarkLink | null
@@ -27,44 +32,52 @@ export const AddLinkForm: React.FunctionComponent<AddLinkFormProps> = ({}) => {
 
       const { value: url } = event.currentTarget;
       if (!isValidUrl(url)) {
-        // TODO: useReducer and form validation
-        // TODO: handle errors correctly and display messages
-        // TODO: React react-hook-form
-        // alert('Invalid URL, please enter Vimeo or Flickr URLs.');
-        console.log('NON VALIDE');
         setCurrentLinkIsValid(false);
         setLoading(false);
+        setErrorMessages([...errorMessages, labels.errorMessage.urlNotValid]);
         return;
       }
 
       const mediaType = isVimeoUrl(url) ? 'video' : 'image';
-      console.log('VALIDE', mediaType);
 
       setLinkMediaType(mediaType);
 
       if (isFlickrUrl(url)) {
-        // TODO: try catch
         // TODO: move apis fetching to backend to prevent api keys licks
-        const photoInfos = await getPhotoInfos(url);
-        if (!photoInfos) {
+
+        try {
+          const photoInfos = await getPhotoInfos(url);
+          if (!photoInfos) {
+            throw new Error();
+          }
+          setCurrentLinkIsValid(true);
+          setErrorMessages(
+            errorMessages.filter((message) => message !== labels.errorMessage.urlNotValid),
+          );
+
+          setCurrentLinkInformation(photoInfos);
+        } catch (error) {
           setCurrentLinkIsValid(false);
           return;
         }
-        setCurrentLinkIsValid(true);
-        console.log(photoInfos);
-        setCurrentLinkInformation(photoInfos);
       }
 
       if (isVimeoUrl(url)) {
-        // TODO: try catch
-        const videoInfos = await getVideoInfos(url);
-        if (!videoInfos) {
+        try {
+          const videoInfos = await getVideoInfos(url);
+          if (!videoInfos) {
+            throw new Error();
+          }
+          setCurrentLinkIsValid(true);
+          setErrorMessages(
+            errorMessages.filter((message) => message !== labels.errorMessage.urlNotValid),
+          );
+
+          setCurrentLinkInformation(videoInfos);
+        } catch (error) {
           setCurrentLinkIsValid(false);
           return;
         }
-        setCurrentLinkIsValid(true);
-        console.log('VIDEO info: ', videoInfos);
-        setCurrentLinkInformation(videoInfos);
       }
 
       setLoading(false);
@@ -84,53 +97,47 @@ export const AddLinkForm: React.FunctionComponent<AddLinkFormProps> = ({}) => {
         dateBookmarked: new Date().toISOString(),
         keywords: [],
       };
-      // TODO: try catch
+
       // TODO: move apis fetching to backend to prevent api keys licks
 
-      const response = await fetch('/api/v1/bookmarks', {
-        method: 'POST',
-        body: JSON.stringify(values),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        const response = await fetch('/api/v1/bookmarks', {
+          method: 'POST',
+          body: JSON.stringify(values),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const responseData = await response.json();
+        const responseData = await response.json();
 
-      if (responseData.error) {
-        setErrorMessages([...errorMessages, responseData.message]);
+        if (responseData.error) {
+          throw new Error(responseData.message);
+        }
+
+        await setCurrentLinkInformation(null);
+        await setLinkMediaType(null);
+        await setCurrentLinkIsValid(false);
+
+        dispatch({
+          type: 'ADD_BOOKMARK',
+          payload: responseData,
+        });
+
+        if (formElement && formElement.current) {
+          formElement.current.reset();
+          setErrorMessages([]);
+        }
+      } catch (error) {
+        setErrorMessages([...new Set([...errorMessages, error.message || error])]);
         if (formElement && formElement.current) {
           formElement.current.reset();
         }
         return;
       }
-
-      await setCurrentLinkInformation(null);
-      await setLinkMediaType(null);
-      await setCurrentLinkIsValid(false);
-
-      dispatch({
-        type: 'ADD_BOOKMARK',
-        payload: responseData,
-      });
-
-      if (formElement && formElement.current) {
-        formElement.current.reset();
-        setErrorMessages([]);
-      }
     },
     [linkMediaType, currentLinkInformation, currentLinkIsValid, errorMessages, dispatch],
   );
-
-  /*
-  0) detect if it is valid url ✅
-  1) detect vimeo or flickr ✅
-  2) Extract title information ✅
-  3) Extract size information ✅
-  3.1) Bonus: extract image or poster image
-
-  4) Continue
-  */
 
   const couldSubmit = linkMediaType && currentLinkInformation && currentLinkIsValid;
   return (
@@ -139,30 +146,31 @@ export const AddLinkForm: React.FunctionComponent<AddLinkFormProps> = ({}) => {
         {errorMessages && errorMessages.length > 0
           ? errorMessages.map((message: string, index) => {
               return (
-                <p style={{ color: 'red' }} key={`error-message#${message}#${index.toString(36)}`}>
+                <FeedBackMessage
+                  key={`error-message#${message}#${index.toString(36)}`}
+                  message={message}
+                  type="negative"
+                >
                   {message}
-                </p>
+                </FeedBackMessage>
               );
             })
           : null}
-        <br />
-        <Form.Group inline>
-          <Form.Field>
-            <label htmlFor="link-url-input">
-              Url
-              <input
-                type="url"
-                name="url"
-                id="link-url-input"
-                onChange={handleUrlInputChange}
-                placeholder="Entrer une url Vimeo ou Flikr"
-              />
-            </label>
-            {loading && <Loader active inline size="small" />}
-          </Form.Field>
-        </Form.Group>
+
+        <Form.Field>
+          <Input
+            type="url"
+            name="url"
+            label="Url"
+            id="link-url-input"
+            onChange={handleUrlInputChange}
+            placeholder="https://vimeo.com/451005534"
+            loading={loading}
+          />
+        </Form.Field>
+
         <Button type="submit" primary disabled={!couldSubmit}>
-          Sauvegarder!
+          Enregister le lien
         </Button>
       </Form>
     </Ref>

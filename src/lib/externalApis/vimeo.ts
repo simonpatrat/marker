@@ -14,7 +14,9 @@ export const getVideoInfos = async (url: string): Promise<VideoBookmarkLink | nu
       },
     });
     const json = await response.json();
-    const { name: title, width, height, user, created_time, duration } = json;
+
+    const { name: title, width, height, user, created_time, duration, pictures } = json;
+    const videoPosterWithPlayButton = pictures?.sizes[2]?.link_with_play_button;
     const videoInfo = {
       url,
       title,
@@ -23,10 +25,12 @@ export const getVideoInfos = async (url: string): Promise<VideoBookmarkLink | nu
       author: user.name,
       dateAdded: created_time,
       duration,
+      photoUrl: videoPosterWithPlayButton,
     };
 
     return videoInfo;
   } catch (error) {
+    console.error(error);
     return null;
   }
 };
