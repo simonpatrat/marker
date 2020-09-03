@@ -45,7 +45,6 @@ REACT_APP_FLICKR_API_KEY=[YOUR_FLICKR_API_KEY]
 
 ```
 npm run start
-
 ```
 
 Or
@@ -57,7 +56,7 @@ yarn start
 you could now navigate to [http://localhost:3000](http://localhost:3000)
 
 The project is proxying api calls based on `"proxy"` entry in package.json.
-The backend is configured to run on 5000 port, you can change it, but be sure to replicate this change by also changing the `"proxy"` value with your new port in this application package.json
+The backend is configured to run on 5000 port, you can change it, but be sure to replicate this change by also changing the `"proxy"` value with your new por tin package.json
 
 ### Test
 
