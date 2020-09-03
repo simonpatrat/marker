@@ -36,7 +36,6 @@ export const UpdateLinkForm: React.FunctionComponent<UpdateLinkFormProps> = ({
         try {
           const data = await updateBookmark({
             ...bookmark,
-            id: 's,adbjkasbdjkasbdjkkjjjjjj',
             dateBookmarked,
           });
           if (data.error) {
