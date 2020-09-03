@@ -102,6 +102,8 @@ export const BookmarkList: React.FunctionComponent<BookmarkListProps> = () => {
           <Table.HeaderCell>Titre</Table.HeaderCell>
           <Table.HeaderCell>Auteur</Table.HeaderCell>
           <Table.HeaderCell>Type</Table.HeaderCell>
+          <Table.HeaderCell>Dimensions</Table.HeaderCell>
+          <Table.HeaderCell>Durée</Table.HeaderCell>
           <Table.HeaderCell>Date d'ajout</Table.HeaderCell>
           <Table.HeaderCell>Date d'enregistremenet</Table.HeaderCell>
           <Table.HeaderCell>Actions</Table.HeaderCell>

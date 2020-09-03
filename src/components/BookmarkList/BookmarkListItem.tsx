@@ -4,6 +4,8 @@ import { Icon, Table, Button, Image } from 'semantic-ui-react';
 import { getDateString } from './helpers';
 import { ConfirmationModal } from '../ConfirmationModal';
 
+import { getVideoDurationTime } from './helpers';
+
 import { Bookmark } from '../../lib/types';
 
 type BookmarkListItemProps = {
@@ -16,11 +18,14 @@ type BookmarkListItemProps = {
 
 export const BookmarkListItem: React.FunctionComponent<BookmarkListItemProps> = ({
   bookmarkId,
-  informations,
+  informations = { duration: 0 },
   type,
   dateBookmarked,
   onClickDeletButton,
 }) => {
+  const duration = 'duration' in informations ? getVideoDurationTime(informations.duration) : '-';
+  console.log('informations: ', informations);
+
   return (
     <Table.Row>
       <Table.Cell className="bookmark-url-cell">
@@ -35,7 +40,14 @@ export const BookmarkListItem: React.FunctionComponent<BookmarkListItemProps> = 
       <Table.Cell>{informations.title}</Table.Cell>
       <Table.Cell>{informations.author}</Table.Cell>
       <Table.Cell>{type}</Table.Cell>
-      <Table.Cell>{getDateString(informations.dateAdded)}</Table.Cell>
+      <Table.Cell>
+        <p>Largeur: {informations.width}</p>
+        <p>Heuteur: {informations.height}</p>
+      </Table.Cell>
+      <Table.Cell>
+        <p>{duration}</p>
+      </Table.Cell>
+      <Table.Cell>{informations.dateAdded ? getDateString(informations.dateAdded) : ''}</Table.Cell>
       <Table.Cell>{getDateString(dateBookmarked)}</Table.Cell>
       <Table.Cell className="actions-table-cell">
         <Link to={`/bookmark/${bookmarkId}`} className="ui button primary mini">
